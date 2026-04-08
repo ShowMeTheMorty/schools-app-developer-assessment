@@ -2,6 +2,7 @@ import express from 'express';
 import { todoService } from '../services/todoService';
 
 const router = express.Router();
+type TodoIdParams = { id: string };
 
 // Create a todo
 router.post('/', async (req: express.Request, res: express.Response) => {
@@ -24,7 +25,7 @@ router.get('/', async (req: express.Request, res: express.Response) => {
 });
 
 // Get a single todo
-router.get('/:id', async (req: express.Request, res: express.Response) => {
+router.get('/:id', async (req: express.Request<TodoIdParams>, res: express.Response) => {
   try {
     const todo = await todoService.find(req.params.id);
     if (!todo) {
@@ -41,7 +42,7 @@ router.get('/:id', async (req: express.Request, res: express.Response) => {
 });
 
 // Update a todo
-router.put('/:id', async (req: express.Request, res: express.Response) => {
+router.put('/:id', async (req: express.Request<TodoIdParams>, res: express.Response) => {
   try {
     const updatedTodo = await todoService.update(req.params.id, req.body);
     res.json(updatedTodo);
@@ -59,7 +60,7 @@ router.put('/:id', async (req: express.Request, res: express.Response) => {
 });
 
 // Delete a todo
-router.delete('/:id', async (req: express.Request, res: express.Response) => {
+router.delete('/:id', async (req: express.Request<TodoIdParams>, res: express.Response) => {
   try {
     await todoService.remove(req.params.id);
     res.status(200).json({ message: 'Todo deleted successfully' });
