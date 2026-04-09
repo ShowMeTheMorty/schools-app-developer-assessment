@@ -8,7 +8,7 @@ interface Todo {
 
 let todos: Todo[] = [];
 
-export const todoService = {
+export const schoolService = {
   findAll: async (): Promise<Todo[]> => {
     return todos;
   },

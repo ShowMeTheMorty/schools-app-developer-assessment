@@ -1,13 +1,13 @@
 import express from 'express';
-import { todoService } from '../services/todoService';
+import { schoolService } from '../services/schools.service';
 
 const router = express.Router();
-type TodoIdParams = { id: string };
+type IdParams = { id: string };
 
 // Create a todo
 router.post('/', async (req: express.Request, res: express.Response) => {
   try {
-    const newTodo = await todoService.create(req.body.title);
+    const newTodo = await schoolService.create(req.body.title);
     res.status(201).json(newTodo);
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -20,14 +20,14 @@ router.post('/', async (req: express.Request, res: express.Response) => {
 
 // Get all todos
 router.get('/', async (req: express.Request, res: express.Response) => {
-  const todos = await todoService.findAll();
+  const todos = await schoolService.findAll();
   res.json(todos);
 });
 
 // Get a single todo
-router.get('/:id', async (req: express.Request<TodoIdParams>, res: express.Response) => {
+router.get('/:id', async (req: express.Request<IdParams>, res: express.Response) => {
   try {
-    const todo = await todoService.find(req.params.id);
+    const todo = await schoolService.find(req.params.id);
     if (!todo) {
       throw new Error('Todo not found');
     }
@@ -42,9 +42,9 @@ router.get('/:id', async (req: express.Request<TodoIdParams>, res: express.Respo
 });
 
 // Update a todo
-router.put('/:id', async (req: express.Request<TodoIdParams>, res: express.Response) => {
+router.put('/:id', async (req: express.Request<IdParams>, res: express.Response) => {
   try {
-    const updatedTodo = await todoService.update(req.params.id, req.body);
+    const updatedTodo = await schoolService.update(req.params.id, req.body);
     res.json(updatedTodo);
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -60,9 +60,9 @@ router.put('/:id', async (req: express.Request<TodoIdParams>, res: express.Respo
 });
 
 // Delete a todo
-router.delete('/:id', async (req: express.Request<TodoIdParams>, res: express.Response) => {
+router.delete('/:id', async (req: express.Request<IdParams>, res: express.Response) => {
   try {
-    await todoService.remove(req.params.id);
+    await schoolService.remove(req.params.id);
     res.status(200).json({ message: 'Todo deleted successfully' });
   } catch (error: unknown) {
     if (error instanceof Error) {
