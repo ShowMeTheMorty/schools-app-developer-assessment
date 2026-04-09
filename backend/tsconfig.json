@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
-    "target": "ES6",
+    "target": "ES2022",
     "module": "CommonJS",
     "outDir": "./dist",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["*.ts", "routes/**/*.ts", "services/**/*.ts"],
+  "include": ["*.ts", "routes/**/*.ts", "services/**/*.ts", "database/database.ts"],
   "exclude": ["node_modules", "dist"]
 }
