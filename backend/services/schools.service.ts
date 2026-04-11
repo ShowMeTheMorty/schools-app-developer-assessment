@@ -1,79 +1,126 @@
 import { v4 as uuidv4 } from 'uuid';
+import { ok, err, Result } from 'neverthrow';
+import School from '../models/school';
+import schoolRepository from '../repositories/schools.repository';
+import { schoolError, type SchoolError, SchoolErrorType } from '../contracts/school.contracts';
+import { CreateSchoolRequest, UpdateSchoolRequest } from '../contracts/school.contracts';
 
-interface Todo {
-  id: string;
-  title: string;
-  completed: boolean;
-}
+const maxTitleLength: number = 1220000; // should move out to config
 
-let todos: Todo[] = [];
+// core invariants enforced:
+// - school title must be unique and non-empty
 
-export const schoolService = {
-  findAll: async (): Promise<Todo[]> => {
-    return todos;
-  },
+const listSchools = async (page: number, limit: number): Promise<Result<School[], SchoolError>> => {
+  try {
+    const schools = await schoolRepository.listSchools(page, limit);
+    return ok(schools);
+  } catch (error) {
+    return err(schoolError(SchoolErrorType.InternalError, 'Failed to fetch schools'));
+  }
+};
 
-  find: async (id: string): Promise<Todo | undefined> => {
-    return todos.find((t) => t.id === id);
-  },
+const getSchoolById = async (id: string): Promise<Result<School, SchoolError>> => {
+  try {
+    const school = await schoolRepository.getSchool(id);
+    if (!school) {
+      return err(schoolError(SchoolErrorType.NotFound, 'School not found'));
+    }
+    return ok(school);
+  } catch (error) {
+    return err(schoolError(SchoolErrorType.InternalError, 'Failed to fetch school'));
+  }
+};
 
-  create: async (title: string): Promise<Todo> => {
-    if (!title || typeof title !== 'string' || title.trim() === '') {
-      throw new Error('Title is required and must be a non-empty string');
+// handy for a search function later?
+const getSchoolByTitle = async (title: string): Promise<Result<School, SchoolError>> => {
+  try {
+    const school = await schoolRepository.findSchoolByTitle(title);
+    if (!school) {
+      return err(schoolError(SchoolErrorType.NotFound, 'School not found'));
+    }
+    return ok(school);
+  } catch (error) {
+    return err(schoolError(SchoolErrorType.InternalError, 'Failed to fetch school'));
+  }
+};
+
+const createSchool = async (request: CreateSchoolRequest): Promise<Result<School, SchoolError>> => {
+  const title = request.title.trim();
+
+  if (title.length === 0 || title.length > maxTitleLength) {
+    return err(schoolError(SchoolErrorType.ValidationError, `Title must be between 1 and ${maxTitleLength} characters`));
+  }
+
+  // enforce invariant of title uniquness
+  const existingSchool = await schoolRepository.findSchoolByTitle(title);
+  if (existingSchool) {
+    return err(schoolError(SchoolErrorType.DuplicateError, 'A school with this title already exists'));
+  }
+  
+  const school: School = {
+    id: uuidv4(),
+    title: request.title,
+    completed: false,
+  };
+  
+  try {
+    await schoolRepository.addSchool(school);
+    return ok(school);
+  } catch (error) {
+    return err(schoolError(SchoolErrorType.InternalError, 'Failed to create school'));
+  }
+};
+
+const updateSchool = async (request: UpdateSchoolRequest): Promise<Result<School, SchoolError>> => {
+  const existingSchool = await schoolRepository.getSchool(request.id);
+  if (!existingSchool) {
+    return err(schoolError(SchoolErrorType.NotFound, 'School not found'));
+  }
+  
+  const title: string | undefined = request.title?.trim();
+  const completed: boolean | undefined = request.completed;
+
+  if (title !== undefined) {
+    if (title.length === 0 || title.length > maxTitleLength) {
+      return err(schoolError(SchoolErrorType.ValidationError, `Title must be between 1 and ${maxTitleLength} characters`));
+    }
+    // enforce invariant of title uniquness
+    if (await schoolRepository.findSchoolByTitle(title)) {
+      return err(schoolError(SchoolErrorType.DuplicateError, 'A school with this title already exists'));
     }
 
-    const existingTodo = todos.find(
-      (t) => t.title.toLowerCase() === title.trim().toLowerCase()
-    );
-    if (existingTodo) {
-      throw new Error('A todo with this title already exists');
+    existingSchool.title = title;
+  }
+
+  if (completed !== undefined) {
+    existingSchool.completed = completed;
+  }
+
+  try {
+    await schoolRepository.updateSchool(existingSchool);
+    return ok(existingSchool);
+  } catch (error) {
+    return err(schoolError(SchoolErrorType.InternalError, 'Failed to update school'));
+  }
+};
+
+const deleteSchool = async (id: string): Promise<Result<void, SchoolError>> => {
+  try {
+    const success = await schoolRepository.deleteSchool(id);
+    if (!success) {
+      return err(schoolError(SchoolErrorType.NotFound, 'School not found'));
     }
+    return ok();
+  } catch (error) {
+    return err(schoolError(SchoolErrorType.InternalError, 'Failed to delete school'));
+  }
+};
 
-    const newTodo: Todo = {
-      id: uuidv4(),
-      title: title.trim(),
-      completed: false,
-    };
-    todos.push(newTodo);
-    return newTodo;
-  },
-
-  update: async (id: string, updates: Partial<Todo>): Promise<Todo> => {
-    const todoIndex = todos.findIndex((t) => t.id === id);
-    if (todoIndex === -1) {
-      throw new Error('Todo not found');
-    }
-
-    const { title, completed } = updates;
-    if (
-      title !== undefined &&
-      (typeof title !== 'string' || title.trim() === '')
-    ) {
-      throw new Error('Title must be a non-empty string');
-    }
-
-    const updatedTodo = { ...todos[todoIndex] };
-    if (title !== undefined) {
-      const existingTodo = todos.find(
-        (t) =>
-          t.id !== id && t.title.toLowerCase() === title.trim().toLowerCase()
-      );
-      if (existingTodo) {
-        throw new Error('A todo with this title already exists');
-      }
-      updatedTodo.title = title.trim();
-    }
-    if (completed !== undefined) updatedTodo.completed = Boolean(completed);
-
-    todos[todoIndex] = updatedTodo;
-    return updatedTodo;
-  },
-
-  remove: async (id: string): Promise<void> => {
-    const todoIndex = todos.findIndex((t) => t.id === id);
-    if (todoIndex === -1) {
-      throw new Error('Todo not found');
-    }
-    todos.splice(todoIndex, 1);
-  },
+export default {
+  listSchools,
+  getSchoolById,
+  getSchoolByTitle,
+  createSchool,
+  updateSchool,
+  deleteSchool
 };

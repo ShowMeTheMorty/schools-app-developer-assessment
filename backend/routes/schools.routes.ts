@@ -1,11 +1,11 @@
 import express from 'express';
-import * as schoolsController from '../controllers/schools.controllers'
+import schoolsController from '../controllers/schools.controllers'
 const router = express.Router();
 
 router
   .route('/')
   .get(schoolsController.listSchools)
-  .post(schoolsController.addSchool);
+  .post(schoolsController.createSchool);
 
 router
   .route('/:id')
