@@ -1,102 +1,148 @@
-// extracting routes logic into controllers
 import { Request, Response } from 'express'
 import schoolService from '../services/schools.service';
-import School from '../models/school';
-import { Result } from 'neverthrow';
-import { CreateSchoolRequest, SchoolError, SchoolErrorType, UpdateSchoolRequest } from '../contracts/school.contracts';
+import {
+  IdParam,
+  IdParamSchema,
+  ListSchoolsQuery,
+  ListSchoolsQuerySchema,
+  CreateSchoolBody,
+  CreateSchoolBodySchema,
+  UpdateSchoolBody,
+  UpdateSchoolBodySchema
+} from '../contracts/school.schemas';
+import { sendDomainErrorAsApiError, sendZodErrorAsApiError } from './helpers/sendApiErrorResponse';
+import { z } from 'zod';
 
-// uniform error handling
-const handleErrorResponse = (response: Response, error: SchoolError) => {
-  switch (error.type) {
-    case SchoolErrorType.NotFound:
-      response.status(404).json(error);
-      break;
-    case SchoolErrorType.ValidationError:
-      response.status(400).json(error);
-      break;
-    case SchoolErrorType.DuplicateError:
-      response.status(409).json(error);
-      break;
-    case SchoolErrorType.InternalError:
-    default:
-      response.status(500).json(error);
-      break;
+const parseOrSendZodError = <T>(
+  response: Response,
+  schema: z.ZodSchema<T>,
+  value: unknown,
+): T | undefined => {
+  const parseResult = schema.safeParse(value);
+  if (!parseResult.success) {
+    sendZodErrorAsApiError(response, parseResult.error);
+    return undefined;
   }
+
+  return parseResult.data;
 };
 
-const listSchools = async (request: Request, response: Response): Promise<void> => {
-  // todo: use request
-  const schoolsResult: Result<School[], SchoolError> = await schoolService.listSchools(1, 17);
-  
-  if (schoolsResult.isOk()) {
-    response.status(200).json(schoolsResult.value);
+
+export const listSchools = async (
+  request: Request<{}, {}, {}, ListSchoolsQuery>, 
+  response: Response
+): Promise<void> => {
+  const parsedQuery = parseOrSendZodError(response, ListSchoolsQuerySchema, request.query);
+  if (!parsedQuery) {
     return;
   }
 
-  handleErrorResponse(response, schoolsResult.error);
+  const listSchoolsRequest = {
+    page: parsedQuery.page,
+    limit: parsedQuery.limit,
+  };
+
+  const schoolsResult = await schoolService.listSchools(listSchoolsRequest);
+  
+  if (!schoolsResult.isOk()) {
+    sendDomainErrorAsApiError(response, schoolsResult.error);
+    return;
+  }
+  
+  response.status(200).json(schoolsResult.value);
 };
 
-const getSchool = async (request: Request<{id: string}>, response: Response): Promise<void> => {
-  // todo: use request
-  const schoolResult = await schoolService.getSchoolById(request.params.id);
-  
-  if (schoolResult.isOk()) {
-    response.status(200).json(schoolResult.value);
+
+export const getSchool = async (
+  request: Request<IdParam>, 
+  response: Response
+): Promise<void> => {
+  const parsedParams = parseOrSendZodError(response, IdParamSchema, request.params);
+  if (!parsedParams) {
     return;
   }
 
-  handleErrorResponse(response, schoolResult.error);
+  const schoolResult = await schoolService.getSchoolById(parsedParams.id);
+  
+  if (!schoolResult.isOk()) {
+    sendDomainErrorAsApiError(response, schoolResult.error);
+    return;
+  }
+
+  response.status(200).json(schoolResult.value);
 };
 
-const createSchool = async (request: Request, response: Response): Promise<void> => {
-  // todo: use request
-  const placeholder: CreateSchoolRequest = {
-    title: 'placeholder request title'
+
+export const createSchool = async (
+  request: Request<{}, {}, CreateSchoolBody>, 
+  response: Response
+): Promise<void> => {
+  const parsedBody = parseOrSendZodError(response, CreateSchoolBodySchema, request.body);
+  if (!parsedBody) {
+    return;
+  }
+
+  const createSchoolRequest = {
+    title: parsedBody.title,
+  };
+
+  const schoolResult = await schoolService.createSchool(createSchoolRequest);
+  
+  if (!schoolResult.isOk()) {
+    sendDomainErrorAsApiError(response, schoolResult.error);
+    return;
+  }
+  
+  response.status(201).json(schoolResult.value);
+};
+
+
+export const updateSchool = async (
+  request: Request<IdParam, {}, UpdateSchoolBody>, 
+  response: Response
+): Promise<void> => {
+  const parsedParams = parseOrSendZodError(response, IdParamSchema, request.params);
+  if (!parsedParams) {
+    return;
+  }
+
+  const parsedBody = parseOrSendZodError(response, UpdateSchoolBodySchema, request.body);
+  if (!parsedBody) {
+    return;
+  }
+
+  const updateSchoolRequest = {
+    id: parsedParams.id,
+    title: parsedBody.title,
+    completed: parsedBody.completed
   };
   
-  const schoolResult = await schoolService.createSchool(placeholder);
+  const schoolResult = await schoolService.updateSchool(updateSchoolRequest);
   
-  if (schoolResult.isOk()) {
-    response.status(201).json(schoolResult.value);
+  if (!schoolResult.isOk()) {
+    sendDomainErrorAsApiError(response, schoolResult.error);
     return;
   }
 
-  handleErrorResponse(response, schoolResult.error);
+  response.status(200).json(schoolResult.value);
 };
 
-const updateSchool = async (request: Request<{id: string}>, response: Response): Promise<void> => {
-  // todo: use request
-  const placeholder: UpdateSchoolRequest = {
-    id: request.params.id,
-    title: 'placeholder updated title',
-    completed: true
-  };
-  
-  const schoolResult = await schoolService.updateSchool(placeholder);
-  
-  if (schoolResult.isOk()) {
-    response.status(200).json(schoolResult.value);
+
+export const deleteSchool = async (
+  request: Request<IdParam>, 
+  response: Response
+): Promise<void> => {
+  const parsedParams = parseOrSendZodError(response, IdParamSchema, request.params);
+  if (!parsedParams) {
     return;
   }
 
-  handleErrorResponse(response, schoolResult.error);
-};
-
-const deleteSchool = async (request: Request<{id: string}>, response: Response): Promise<void> => {
-  const schoolResult = await schoolService.deleteSchool(request.params.id);
+  const schoolResult = await schoolService.deleteSchool(parsedParams.id);
   
-  if (schoolResult.isOk()) {
-    response.status(204).send();
+  if (!schoolResult.isOk()) {
+    sendDomainErrorAsApiError(response, schoolResult.error);
     return;
   }
 
-  handleErrorResponse(response, schoolResult.error);
-};
-
-export default { 
-  listSchools, 
-  getSchool,
-  createSchool, 
-  updateSchool,
-  deleteSchool,
+  response.status(204).send();
 };
