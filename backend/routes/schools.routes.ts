@@ -1,16 +1,19 @@
 import express from 'express';
-import * as schoolsController from '../controllers/schools.controllers'
-const router = express.Router();
+import type { SchoolsController } from '../controllers/schools.controllers';
 
-router
-  .route('/')
-  .get(schoolsController.listSchools)
-  .post(schoolsController.createSchool);
+export const createSchoolsRouter = (schoolsController: SchoolsController): express.Router => {
+  const router = express.Router();
 
-router
-  .route('/:id')
-  .get(schoolsController.getSchool)
-  .patch(schoolsController.updateSchool)
-  .delete(schoolsController.deleteSchool);
+  router
+    .route('/')
+    .get(schoolsController.listSchools)
+    .post(schoolsController.createSchool);
 
-export default router;
+  router
+    .route('/:id')
+    .get(schoolsController.getSchool)
+    .patch(schoolsController.updateSchool)
+    .delete(schoolsController.deleteSchool);
+
+  return router;
+};

@@ -1,5 +1,6 @@
 import { getDatabase } from '../database/database';
 import School from '../models/school';
+import type { SchoolRepository } from '../contracts/school.repository.interface';
 
 const listSchools = async (page: number, limit: number): Promise<School[]> => {
   const db = await getDatabase();
@@ -47,7 +48,7 @@ const deleteSchool = async (id: string): Promise<boolean> => {
   return true;
 };
 
-export default {
+const schoolRepository: SchoolRepository = {
   listSchools,
   getSchool,
   addSchool,
@@ -55,3 +56,5 @@ export default {
   updateSchool,
   deleteSchool
 };
+
+export default schoolRepository;
