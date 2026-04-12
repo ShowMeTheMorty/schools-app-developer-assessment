@@ -3,7 +3,7 @@ import { ok, err, Result } from 'neverthrow';
 import School from '../models/school';
 import schoolRepository from '../repositories/schools.repository';
 import { type DomainError, DomainErrorType } from '../contracts/domainError';
-import { CreateSchoolRequest, ListSchoolsReq  uest, UpdateSchoolRequest } from '../contracts/school.contracts';
+import { CreateSchoolRequest, ListSchoolsRequest, UpdateSchoolRequest } from '../contracts/school.contracts';
 
 // core invariants enforced:
 // - school title must be unique
@@ -50,19 +50,19 @@ const createSchool = async (request: CreateSchoolRequest): Promise<Result<School
     return err({ type: DomainErrorType.ValidationError, message: "Sith order injection is not allowed" });
   }
 
-  // enforce invariant of title uniquness
-  const existingSchool = await schoolRepository.findSchoolByTitle(title);
-  if (existingSchool) {
-    return err({ type: DomainErrorType.DuplicateError, message: 'A school with this title already exists' });
-  }
-  
-  const school: School = {
-    id: uuidv4(),
-    title: request.title,
-    completed: false,
-  };
-  
   try {
+    // enforce invariant of title uniquness
+    const existingSchool = await schoolRepository.findSchoolByTitle(title);
+    if (existingSchool) {
+      return err({ type: DomainErrorType.DuplicateError, message: 'A school with this title already exists' });
+    }
+
+    const school: School = {
+      id: uuidv4(),
+      title: request.title,
+      completed: false,
+    };
+
     await schoolRepository.addSchool(school);
     return ok(school);
   } catch (error) {
@@ -71,32 +71,32 @@ const createSchool = async (request: CreateSchoolRequest): Promise<Result<School
 };
 
 const updateSchool = async (request: UpdateSchoolRequest): Promise<Result<School, DomainError>> => {
-  const existingSchool = await schoolRepository.getSchool(request.id);
-  if (!existingSchool) {
-    return err({ type: DomainErrorType.NotFound, message: 'School not found' });
-  }
-  
   const title: string | undefined = request.title?.trim();
   const completed: boolean | undefined = request.completed;
 
-  if (title !== undefined) {
-    // novelty validation error for star wars fans, as placeholder for enforcing validation invariants
-    if (title.toLowerCase() === 'execute order 66') {
-      return err({ type: DomainErrorType.ValidationError, message: "Sith order injection is not allowed" });
-    }
-    // enforce invariant of title uniquness
-    if (await schoolRepository.findSchoolByTitle(title)) {
-      return err({ type: DomainErrorType.DuplicateError, message: 'A school with this title already exists' });
-    }
-
-    existingSchool.title = title;
-  }
-
-  if (completed !== undefined) {
-    existingSchool.completed = completed;
-  }
-
   try {
+    const existingSchool = await schoolRepository.getSchool(request.id);
+    if (!existingSchool) {
+      return err({ type: DomainErrorType.NotFound, message: 'School not found' });
+    }
+
+    if (title !== undefined) {
+      // novelty validation error for star wars fans, as placeholder for enforcing validation invariants
+      if (title.toLowerCase() === 'execute order 66') {
+        return err({ type: DomainErrorType.ValidationError, message: "Sith order injection is not allowed" });
+      }
+      // enforce invariant of title uniquness
+      if (await schoolRepository.findSchoolByTitle(title)) {
+        return err({ type: DomainErrorType.DuplicateError, message: 'A school with this title already exists' });
+      }
+
+      existingSchool.title = title;
+    }
+
+    if (completed !== undefined) {
+      existingSchool.completed = completed;
+    }
+
     await schoolRepository.updateSchool(existingSchool);
     return ok(existingSchool);
   } catch (error) {
