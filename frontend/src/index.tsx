@@ -6,7 +6,8 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { MantineProvider } from '@mantine/core';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
+import { BrowserRouter } from 'react-router-dom';
+import { appTheme } from './theme/theme';
 
 const queryClient = new QueryClient();
 const container = document.getElementById('root');
@@ -18,11 +19,13 @@ if (!container) {
 const root = ReactDOM.createRoot(container);
 root.render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <MantineProvider defaultColorScheme='light'>
-        <App />
-      </MantineProvider>
-    </QueryClientProvider>
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <MantineProvider theme={appTheme} defaultColorScheme='light'>
+          <App />
+        </MantineProvider>
+      </QueryClientProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );
 

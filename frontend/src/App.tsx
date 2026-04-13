@@ -1,50 +1,50 @@
 import React from 'react';
-import './App.css';
+import styles from './App.module.css';
+import { 
+  AppShell, 
+  Burger, 
+  Group, 
+  Title, 
+} from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import AppRoutes from './routes';
+import Navbar from './components/organisms/Navbar';
 
 function App() {
+  const [opened, { toggle }] = useDisclosure(false);
+
   return (
-    <div className='App'>
-      <header className='App-header'>
-        <h1>Welcome to SchoolDocs</h1>
-      </header>
-      <main>
-        <h2>Developer Assessment</h2>
-        <p>Thank you for your interest in joining our team at SchoolDocs!</p>
-        <p>
-          This assessment is designed to evaluate your skills in software
-          development.
-        </p>
-        <div className='instructions'>
-          <h3>Instructions:</h3>
-          <ol>
-            <li>
-              You will receive specific tasks based on the role you're applying
-              for. These tasks may involve frontend, backend, or full-stack
-              development.
-            </li>
-            <li>
-              Focus on creating a clean, maintainable, and well-structured
-              codebase.
-            </li>
-            <li>
-              Ensure proper error handling and user feedback in your
-              implementation.
-            </li>
-            <li>
-              You can choose to write your own styles or use any UI framework to showcase your design skills.
-            </li>
-            <li>
-              You are also welcome to use TypeScript to demonstrate your proficiency in type safety and code maintainability.
-            </li>
-            <li>
-              Be prepared to discuss your implementation choices and potential
-              improvements.
-            </li>
-          </ol>
-        </div>
-        <p>Good luck, and we look forward to reviewing your work!</p>
-      </main>
-    </div>
+    <AppShell 
+      padding="md"
+      header={{ height: 60 }}
+      navbar={{
+        width: 300,
+        breakpoint: 'sm',
+        collapsed: { 
+          mobile: !opened,
+          desktop: !opened,
+        }
+      }}
+    >
+      <AppShell.Header className={styles.AppHeader}>
+        <Group h="100%" px="md" align='center'>
+          <Burger
+            opened={opened}
+            onClick={toggle}
+            size="sm"
+          />
+          <Title order={3}>Welcome to SchoolDocs</Title>
+        </Group>
+      </AppShell.Header>
+
+      <AppShell.Navbar p="md">
+        <Navbar onNavigate={toggle} />
+      </AppShell.Navbar>
+
+      <AppShell.Main>
+        <AppRoutes />
+      </AppShell.Main>
+    </AppShell>
   );
 }
 

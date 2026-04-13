@@ -4,17 +4,11 @@
   color: #333;
 }
 
-.App-header {
+.AppHeader {
   background-color: #4caf50; /* Schooldocs green */
-  padding: 20px;
   color: white;
 }
 
-main {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-}
 
 h1 {
   margin: 0;
@@ -34,12 +28,4 @@ h2 {
 
 .instructions h3 {
   color: #4caf50;
-}
-
-ol {
-  padding-left: 20px;
-}
-
-li {
-  margin-bottom: 10px;
 }
