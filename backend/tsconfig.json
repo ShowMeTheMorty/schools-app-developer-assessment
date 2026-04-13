@@ -4,6 +4,7 @@
     "module": "CommonJS",
     "outDir": "./dist",
     "esModuleInterop": true,
+    "types": ["node", "jest", "supertest"],
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
