@@ -25,7 +25,7 @@ export const updateSchool = async (
   id: string, 
   body: UpdateSchoolBody
 ): Promise<School> => {
-  const response = await httpClient.put<School>(`/schools/${id}`, body);
+  const response = await httpClient.patch<School>(`/schools/${id}`, body);
   return response.data;
 };
 

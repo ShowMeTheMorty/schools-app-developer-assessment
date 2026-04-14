@@ -2,7 +2,7 @@ import axios from 'axios';
 import type { ApiError, AppApiError } from './types';
 
 const httpClient = axios.create({
-  baseURL: '', // Using CRA proxy??
+  baseURL: 'http://localhost:7777/api', // Using CRA proxy??
   timeout: 10_000,
   headers: {
     'Content-Type': 'application/json',

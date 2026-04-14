@@ -6,12 +6,15 @@ import {
   Group, 
   Title, 
 } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import AppRoutes from './routes';
 import Navbar from './components/organisms/Navbar';
 
+
 function App() {
   const [opened, { toggle }] = useDisclosure(false);
+  // Consider mobile if screen is less than 768px wide
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   return (
     <AppShell 
@@ -22,7 +25,7 @@ function App() {
         breakpoint: 'sm',
         collapsed: { 
           mobile: !opened,
-          desktop: !opened,
+          desktop: opened,
         }
       }}
     >
@@ -33,12 +36,12 @@ function App() {
             onClick={toggle}
             size="sm"
           />
-          <Title order={3}>Welcome to SchoolDocs</Title>
+          <Title order={3}>School Dash</Title>
         </Group>
       </AppShell.Header>
 
       <AppShell.Navbar p="md">
-        <Navbar onNavigate={toggle} />
+        <Navbar onNavigate={isMobile ? toggle : undefined} />
       </AppShell.Navbar>
 
       <AppShell.Main>

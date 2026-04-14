@@ -1,9 +1,10 @@
-import { Container, Text } from '@mantine/core';
+import { Container, Text, Title } from '@mantine/core';
 
 const WelcomePage = (): JSX.Element => {
   return (
     <Container>
-      <Text c="dimmed">Welcome to SchoolDocs!</Text>
+      <Title order={2}>Welcome to the SchoolsDocs School Dash, Assessor!</Title>
+      <Text c="dimmed">You are the 1st assessor to log in today.</Text>
     </Container>
   );
 }

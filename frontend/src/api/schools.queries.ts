@@ -17,14 +17,14 @@ import type {
 
 
 const useListSchoolsQuery = (params: ListSchoolsParams) => {
-  useQuery<School[], AppApiError>({
+  return useQuery<School[], AppApiError>({
     queryKey: schoolKeys.list(params.page, params.limit),
     queryFn: () => listSchools(params),
   });
 }
 
 const useGetSchoolQuery = (id: string) => {
-  useQuery<School, AppApiError>({
+  return useQuery<School, AppApiError>({
     queryKey: schoolKeys.detail(id),
     queryFn: () => getSchool(id),
   });
