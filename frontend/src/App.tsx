@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './App.module.css';
 import { 
   AppShell, 
@@ -6,7 +6,7 @@ import {
   Group, 
   Title, 
 } from '@mantine/core';
-import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import { useMediaQuery } from '@mantine/hooks';
 import AppRoutes from './routes';
 import Navbar from './components/organisms/Navbar';
 import { useAside } from 'contexts/aside/AsideContext';

@@ -62,6 +62,10 @@ export const createSchoolsService = (schoolRepository: SchoolRepository) => {
         id: uuidv4(),
         title: request.title,
         completed: false,
+        address: request.address,
+        contactEmail: request.contactEmail,
+        contactPhone: request.contactPhone,
+        note: request.note,
       };
 
       await schoolRepository.addSchool(school);
@@ -74,6 +78,10 @@ export const createSchoolsService = (schoolRepository: SchoolRepository) => {
   const updateSchool = async (request: UpdateSchoolRequest): Promise<Result<School, DomainError>> => {
     const title: string | undefined = request.title?.trim();
     const completed: boolean | undefined = request.completed;
+    const address: string | undefined = request.address;
+    const contactEmail: string | undefined = request.contactEmail;
+    const contactPhone: string | undefined = request.contactPhone;
+    const note: string | undefined = request.note;
 
     try {
       const existingSchool = await schoolRepository.getSchool(request.id);
@@ -96,6 +104,22 @@ export const createSchoolsService = (schoolRepository: SchoolRepository) => {
 
       if (completed !== undefined) {
         existingSchool.completed = completed;
+      }
+
+      if (address !== undefined) {
+        existingSchool.address = address;
+      }
+
+      if (contactEmail !== undefined) {
+        existingSchool.contactEmail = contactEmail;
+      }
+
+      if (contactPhone !== undefined) {
+        existingSchool.contactPhone = contactPhone;
+      }
+
+      if (note !== undefined) {
+        existingSchool.note = note;
       }
 
       await schoolRepository.updateSchool(existingSchool);

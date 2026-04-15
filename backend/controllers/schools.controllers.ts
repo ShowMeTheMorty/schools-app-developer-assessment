@@ -82,6 +82,10 @@ export const createSchoolsController = (schoolService: SchoolsService) => {
 
     const createSchoolRequest = {
       title: parsedBody.title,
+      address: parsedBody.address,
+      contactEmail: parsedBody.contactEmail,
+      contactPhone: parsedBody.contactPhone,
+      note: parsedBody.note,
     };
 
     const schoolResult = await schoolService.createSchool(createSchoolRequest);
@@ -111,7 +115,11 @@ export const createSchoolsController = (schoolService: SchoolsService) => {
     const updateSchoolRequest = {
       id: parsedParams.id,
       title: parsedBody.title,
-      completed: parsedBody.completed
+      completed: parsedBody.completed,
+      address: parsedBody.address,
+      contactEmail: parsedBody.contactEmail,
+      contactPhone: parsedBody.contactPhone,
+      note: parsedBody.note,
     };
 
     const schoolResult = await schoolService.updateSchool(updateSchoolRequest);

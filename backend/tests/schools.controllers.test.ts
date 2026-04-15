@@ -35,7 +35,15 @@ describe('schools controller', () => {
     const response = createMockResponse();
 
     const schools: School[] = [
-      { id: '11111111-1111-4111-8111-111111111111', title: 'Alpha', completed: false },
+      {
+        id: '11111111-1111-4111-8111-111111111111',
+        title: 'Alpha',
+        completed: false,
+        address: 'Address 1',
+        contactEmail: 'alpha@example.com',
+        contactPhone: '555-1000',
+        note: 'Note 1',
+      },
     ];
 
     service.listSchools.mockResolvedValue(ok(schools));
@@ -81,17 +89,33 @@ describe('schools controller', () => {
       id: '11111111-1111-4111-8111-111111111111',
       title: 'New School',
       completed: false,
+      address: 'Address 2',
+      contactEmail: 'new@example.com',
+      contactPhone: '555-2000',
+      note: 'Note 2',
     };
 
     service.createSchool.mockResolvedValue(ok(school));
 
     const request = {
-      body: { title: '  New School  ' },
+      body: {
+        title: '  New School  ',
+        address: 'Address 2',
+        contactEmail: 'new@example.com',
+        contactPhone: '555-2000',
+        note: 'Note 2',
+      },
     } as unknown as Request;
 
     await controller.createSchool(request as any, response);
 
-    expect(service.createSchool).toHaveBeenCalledWith({ title: 'New School' });
+    expect(service.createSchool).toHaveBeenCalledWith({
+      title: 'New School',
+      address: 'Address 2',
+      contactEmail: 'new@example.com',
+      contactPhone: '555-2000',
+      note: 'Note 2',
+    });
     expect(response.status).toHaveBeenCalledWith(201);
     expect(response.json).toHaveBeenCalledWith(school);
   });
@@ -129,13 +153,24 @@ describe('schools controller', () => {
       id: '11111111-1111-4111-8111-111111111111',
       title: 'Updated',
       completed: true,
+      address: 'Address 3',
+      contactEmail: 'updated@example.com',
+      contactPhone: '555-3000',
+      note: 'Note 3',
     };
 
     service.updateSchool.mockResolvedValue(ok(updatedSchool));
 
     const request = {
       params: { id: '11111111-1111-4111-8111-111111111111' },
-      body: { title: 'Updated', completed: true },
+      body: {
+        title: 'Updated',
+        completed: true,
+        address: 'Address 3',
+        contactEmail: 'updated@example.com',
+        contactPhone: '555-3000',
+        note: 'Note 3',
+      },
     } as unknown as Request;
 
     await controller.updateSchool(request as any, response);
@@ -144,6 +179,10 @@ describe('schools controller', () => {
       id: '11111111-1111-4111-8111-111111111111',
       title: 'Updated',
       completed: true,
+      address: 'Address 3',
+      contactEmail: 'updated@example.com',
+      contactPhone: '555-3000',
+      note: 'Note 3',
     });
     expect(response.status).toHaveBeenCalledWith(200);
     expect(response.json).toHaveBeenCalledWith(updatedSchool);

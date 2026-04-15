@@ -3,7 +3,11 @@
     {
       "id": "11111111-1111-1111-1111-111111111111",
       "title": "Springfield Elementary",
-      "completed": false
+      "completed": false,
+      "address": "742 Evergreen Terrace",
+      "contactEmail": "contact@springfield-elementary.edu",
+      "contactPhone": "555-0000",
+      "note": "Seed school"
     }
   ]
 }

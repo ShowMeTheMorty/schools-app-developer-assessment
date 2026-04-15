@@ -2,6 +2,10 @@ export interface School {
   id: string;
   title: string;
   completed: boolean;
+  address: string;
+  contactEmail: string;
+  contactPhone: string;
+  note: string;
 }
 
 export interface ListSchoolsParams {
@@ -11,11 +15,19 @@ export interface ListSchoolsParams {
 
 export interface CreateSchoolBody {
   title: string;
+  address: string;
+  contactEmail: string;
+  contactPhone: string;
+  note: string;
 }
 
 export interface UpdateSchoolBody {
   title?: string;
   completed?: boolean;
+  address?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  note?: string;
 }
 
 export interface ApiErrorDetails {

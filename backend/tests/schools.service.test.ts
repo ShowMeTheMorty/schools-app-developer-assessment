@@ -19,8 +19,24 @@ describe('createSchoolsService', () => {
     const schoolRepo = mockSchoolRepository();
     const schoolService = createSchoolsService(schoolRepo);
     const schools: School[] = [
-      { id: '1', title: 'School A', completed: false },
-      { id: '2', title: 'School B', completed: true },
+      {
+        id: '1',
+        title: 'School A',
+        completed: false,
+        address: 'Address A',
+        contactEmail: 'a@example.com',
+        contactPhone: '555-6000',
+        note: 'Note A',
+      },
+      {
+        id: '2',
+        title: 'School B',
+        completed: true,
+        address: 'Address B',
+        contactEmail: 'b@example.com',
+        contactPhone: '555-6001',
+        note: 'Note B',
+      },
     ];
 
     schoolRepo.listSchools.mockResolvedValue(schools);
@@ -52,7 +68,15 @@ describe('createSchoolsService', () => {
   it('gets school by id successfully', async () => {
     const schoolRepo = mockSchoolRepository();
     const schoolService = createSchoolsService(schoolRepo);
-    const school: School = { id: '1', title: 'School A', completed: false };
+    const school: School = {
+      id: '1',
+      title: 'School A',
+      completed: false,
+      address: 'Address A',
+      contactEmail: 'a@example.com',
+      contactPhone: '555-6000',
+      note: 'Note A',
+    };
 
     schoolRepo.getSchool.mockResolvedValue(school);
 
@@ -82,7 +106,15 @@ describe('createSchoolsService', () => {
   it('gets school by title successfully', async () => {
     const schoolRepo = mockSchoolRepository();
     const schoolService = createSchoolsService(schoolRepo);
-    const school: School = { id: '1', title: 'School A', completed: false };
+    const school: School = {
+      id: '1',
+      title: 'School A',
+      completed: false,
+      address: 'Address A',
+      contactEmail: 'a@example.com',
+      contactPhone: '555-6000',
+      note: 'Note A',
+    };
 
     schoolRepo.findSchoolByTitle.mockResolvedValue(school);
 
@@ -100,12 +132,25 @@ describe('createSchoolsService', () => {
 
     schoolRepo.findSchoolByTitle.mockResolvedValue(undefined);
 
-    const result = await schoolService.createSchool({ title: 'Test School' });
+    const result = await schoolService.createSchool({
+      title: 'Test School',
+      address: 'Address C',
+      contactEmail: 'test@example.com',
+      contactPhone: '555-6002',
+      note: 'Note C',
+    });
 
     expect(result.isOk()).toBe(true);
     expect(schoolRepo.findSchoolByTitle).toHaveBeenCalledWith('Test School');
     expect(schoolRepo.addSchool).toHaveBeenCalledWith(
-      expect.objectContaining({ title: 'Test School', completed: false })
+      expect.objectContaining({
+        title: 'Test School',
+        completed: false,
+        address: 'Address C',
+        contactEmail: 'test@example.com',
+        contactPhone: '555-6002',
+        note: 'Note C',
+      })
     );
   });
 
@@ -116,10 +161,20 @@ describe('createSchoolsService', () => {
     schoolRepo.findSchoolByTitle.mockResolvedValue({
       id: '1',
       title: 'Test School',
-      completed: false
+      completed: false,
+      address: 'Address C',
+      contactEmail: 'test@example.com',
+      contactPhone: '555-6002',
+      note: 'Note C',
     });
 
-    const result = await schoolService.createSchool({ title: 'Test School' });
+    const result = await schoolService.createSchool({
+      title: 'Test School',
+      address: 'Address C',
+      contactEmail: 'test@example.com',
+      contactPhone: '555-6002',
+      note: 'Note C',
+    });
 
     expect(result.isErr()).toBe(true);
     if (result.isErr()) {
@@ -133,7 +188,13 @@ describe('createSchoolsService', () => {
     const schoolRepo = mockSchoolRepository();
     const schoolService = createSchoolsService(schoolRepo);
 
-    const result = await schoolService.createSchool({ title: 'Execute Order 66' });
+    const result = await schoolService.createSchool({
+      title: 'Execute Order 66',
+      address: 'Address D',
+      contactEmail: 'sith@example.com',
+      contactPhone: '555-6003',
+      note: 'Note D',
+    });
 
     expect(result.isErr()).toBe(true);
     if (result.isErr()) {
@@ -145,7 +206,15 @@ describe('createSchoolsService', () => {
   it('updates title and completed status successfully', async () => {
     const schoolRepo = mockSchoolRepository();
     const schoolService = createSchoolsService(schoolRepo);
-    const existingSchool: School = { id: '1', title: 'Old Title', completed: false };
+    const existingSchool: School = {
+      id: '1',
+      title: 'Old Title',
+      completed: false,
+      address: 'Old Address',
+      contactEmail: 'old@example.com',
+      contactPhone: '555-6004',
+      note: 'Old Note',
+    };
 
     schoolRepo.getSchool.mockResolvedValue(existingSchool);
     schoolRepo.findSchoolByTitle.mockResolvedValue(undefined);
@@ -154,6 +223,10 @@ describe('createSchoolsService', () => {
       id: '1',
       title: 'New Title',
       completed: true,
+      address: 'New Address',
+      contactEmail: 'new@example.com',
+      contactPhone: '555-6005',
+      note: 'New Note',
     });
 
     expect(result.isOk()).toBe(true);
@@ -161,6 +234,10 @@ describe('createSchoolsService', () => {
       id: '1',
       title: 'New Title',
       completed: true,
+      address: 'New Address',
+      contactEmail: 'new@example.com',
+      contactPhone: '555-6005',
+      note: 'New Note',
     });
   });
 

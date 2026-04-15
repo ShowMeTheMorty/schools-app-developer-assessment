@@ -31,6 +31,10 @@ const existingSchool: School = {
   id: '11111111-1111-4111-8111-111111111111',
   title: 'Existing School',
   completed: false,
+  address: 'Existing Address',
+  contactEmail: 'existing@example.com',
+  contactPhone: '555-4000',
+  note: 'Existing Note',
 };
 
 describe('Schools API', () => {
@@ -42,7 +46,13 @@ describe('Schools API', () => {
 
     const response = await request(app)
       .post('/api/schools')
-      .send({ title: 'New School' });
+      .send({
+        title: 'New School',
+        address: 'New Address',
+        contactEmail: 'new@example.com',
+        contactPhone: '555-5000',
+        note: 'New Note',
+      });
 
     expect(response.status).toBe(201);
     expect(response.body).toHaveProperty('id');
@@ -57,7 +67,13 @@ describe('Schools API', () => {
 
     const response = await request(app)
       .post('/api/schools')
-      .send({ title: 'Existing School' });
+      .send({
+        title: 'Existing School',
+        address: 'Duplicate Address',
+        contactEmail: 'duplicate@example.com',
+        contactPhone: '555-5001',
+        note: 'Duplicate Note',
+      });
 
     expect(response.status).toBe(409);
     expect(response.body).toEqual(
@@ -74,7 +90,13 @@ describe('Schools API', () => {
 
     const response = await request(app)
       .post('/api/schools')
-      .send({ title: '' });
+      .send({
+        title: '',
+        address: 'Invalid Address',
+        contactEmail: 'invalid@example.com',
+        contactPhone: '555-5002',
+        note: 'Invalid Note',
+      });
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual(
