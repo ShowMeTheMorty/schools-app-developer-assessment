@@ -22,18 +22,16 @@ const SchoolListPage = (): JSX.Element => {
     }
 
     return (
-      <SchoolsList schools={data!} onSchoolClick={(school) => console.log(school)} />
+      <SchoolsList schools={data!} />
     );
   }
 
   return (
     <>
       <Container>
-        <Stack>
-          <Title order={2}>Schools List</Title>
-          <Text c="dimmed">An index of all databased schools</Text>
-          {schoolsList()} 
-        </Stack>
+        <Title order={2}>Schools List</Title>
+        <Text c="dimmed">An index of all databased schools</Text>
+        {schoolsList()} 
       </Container>
     </>
   );

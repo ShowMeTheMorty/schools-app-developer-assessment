@@ -9,6 +9,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter } from 'react-router-dom';
 import { appTheme } from './theme/theme';
 import queryClient from 'api/queryClient';
+import { AsideProvider } from 'contexts/aside/AsideContext';
 
 const container = document.getElementById('root');
 
@@ -22,7 +23,9 @@ root.render(
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <MantineProvider theme={appTheme} defaultColorScheme='light'>
-          <App />
+          <AsideProvider>
+            <App />
+          </AsideProvider>
         </MantineProvider>
       </QueryClientProvider>
     </BrowserRouter>

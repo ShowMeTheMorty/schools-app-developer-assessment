@@ -1,18 +1,24 @@
-import { Box, Group, Paper } from '@mantine/core';
+import { ActionIcon, Box, Group, Paper, Text } from '@mantine/core';
 import { JSX } from 'react';
+
 
 interface SchoolListItemProps {
   title: string;
+  description?: string;
   onClick: () => void;
 }
 
-const SchoolListItem = ({ title, onClick }: SchoolListItemProps): JSX.Element => {
+const SchoolListItem = ({ title, description, onClick }: SchoolListItemProps): JSX.Element => {
   return (
     <Box onClick={onClick}>
       <Paper shadow="xs" p="md" withBorder>
         <Group>
-          {title}
+          <Text>{title}</Text>
+          {description && (
+            <Text c="dimmed">{description}</Text>
+          )}
         </Group>
+
       </Paper>
     </Box>
   )

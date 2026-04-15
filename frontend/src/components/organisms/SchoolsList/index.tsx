@@ -1,13 +1,16 @@
 import { School } from "api/types";
 import { Paper, Stack, Text } from "@mantine/core";
 import SchoolListItem from "components/molecules/SchoolListItem";
+import { useAside } from "contexts/aside/AsideContext";
+import { AsideMode } from "contexts/aside/aside.types";
 
 interface SchoolsListProps {
   schools: School[];
-  onSchoolClick: (school: School) => void;
 }
 
-const SchoolsList = ({ schools, onSchoolClick }: SchoolsListProps): JSX.Element => {
+const SchoolsList = ({ schools }: SchoolsListProps): JSX.Element => {
+  const { openAside } = useAside();
+  
   return (
     <Paper shadow="sm" p="md">
       {schools.length === 0 ? (
@@ -18,7 +21,8 @@ const SchoolsList = ({ schools, onSchoolClick }: SchoolsListProps): JSX.Element 
             <SchoolListItem 
               key={school.id} 
               title={school.title} 
-              onClick={() => onSchoolClick(school)} 
+              description={school.completed ? "Status: Completed" : "Status: In Progress"}
+              onClick={() => openAside(AsideMode.SchoolDetails, { school })}
             />
           ))}
         </Stack>
