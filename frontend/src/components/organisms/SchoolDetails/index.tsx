@@ -11,7 +11,7 @@ import {
   Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
-import { isNormalizedApiError } from 'api/queryClient';
+import { isNormalisedApiError } from 'api/queryClient';
 import { useUpdateSchoolMutation, useDeleteSchoolMutation } from 'api/schools.queries';
 import { School } from 'api/types';
 import { z } from 'zod';
@@ -92,7 +92,7 @@ const SchoolDetails = ({ school, onClose }: SchoolDetailsFormProps) => {
     } catch (error) {
       notifications.show({
         title: 'Save failed',
-        message: isNormalizedApiError(error) ? error.message : 'Could not update the school.',
+        message: isNormalisedApiError(error) ? error.message : 'Could not update the school.',
         color: 'red',
       });
     }
@@ -112,7 +112,7 @@ const SchoolDetails = ({ school, onClose }: SchoolDetailsFormProps) => {
     } catch (error) {
       notifications.show({
         title: 'Delete failed',
-        message: isNormalizedApiError(error) ? error.message : 'Could not delete the school.',
+        message: isNormalisedApiError(error) ? error.message : 'Could not delete the school.',
         color: 'red',
       });
     }
@@ -169,7 +169,7 @@ const SchoolDetails = ({ school, onClose }: SchoolDetailsFormProps) => {
               variant="outline"
               onClick={() => setDeleteModalOpen(true)}
             >
-              Delete
+              Delete school
             </Button>
 
             <Group>

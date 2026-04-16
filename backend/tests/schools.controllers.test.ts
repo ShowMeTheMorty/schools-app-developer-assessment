@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import { err, ok } from 'neverthrow';
+import type { PaginatedSchoolsResult } from '../contracts/school.contracts';
 import { DomainErrorType } from '../contracts/domainError';
 import type School from '../models/school';
 import { createSchoolsController } from '../controllers/schools.controllers';
@@ -46,7 +47,14 @@ describe('schools controller', () => {
       },
     ];
 
-    service.listSchools.mockResolvedValue(ok(schools));
+    const paginatedSchools: PaginatedSchoolsResult = {
+      data: schools,
+      total: 1,
+      page: 1,
+      limit: 10,
+    };
+
+    service.listSchools.mockResolvedValue(ok(paginatedSchools));
 
     const request = {
       query: { page: '1', limit: '10' },
@@ -56,7 +64,7 @@ describe('schools controller', () => {
 
     expect(service.listSchools).toHaveBeenCalledWith({ page: 1, limit: 10 });
     expect(response.status).toHaveBeenCalledWith(200);
-    expect(response.json).toHaveBeenCalledWith(schools);
+    expect(response.json).toHaveBeenCalledWith(paginatedSchools);
   });
 
   it('returns 400 when list query is invalid', async () => {

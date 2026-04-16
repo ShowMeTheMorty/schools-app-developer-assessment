@@ -10,20 +10,65 @@
       "note": "Bring hand sanitiser."
     },
     {
-      "id": "7018c4f5-aaeb-426d-8ab9-2473a7d4c7f7",
-      "title": "Twist Primary",
-      "completed": true,
-      "address": "123 Floo St",
-      "contactEmail": "sweep@example.com",
-      "contactPhone": "",
-      "note": ""
-    },
-    {
       "id": "eef20f83-181b-4322-abe4-e924ad557695",
       "title": "Middle Intermediate",
       "completed": false,
       "address": "",
       "contactEmail": "",
+      "contactPhone": "",
+      "note": ""
+    },
+    {
+      "id": "46587ee8-b255-4fdd-bef4-5a343691b244",
+      "title": "Optimus Primary",
+      "completed": true,
+      "address": "45 Allspark Drive",
+      "contactEmail": "bumblebee@example.com",
+      "contactPhone": "",
+      "note": ""
+    },
+    {
+      "id": "d33dc59a-ab17-41f2-875c-132176f98d64",
+      "title": "Westfoldfell High",
+      "completed": false,
+      "address": "",
+      "contactEmail": "whereisgondor@example.com",
+      "contactPhone": "",
+      "note": ""
+    },
+    {
+      "id": "f3b47f63-1f3d-4520-a7de-b481417a2e6e",
+      "title": "Hogwarts School",
+      "completed": true,
+      "address": "Platform 9 3/4",
+      "contactEmail": "muggle@example.com",
+      "contactPhone": "",
+      "note": ""
+    },
+    {
+      "id": "894741fb-47f7-4f94-9657-6e78dc28b038",
+      "title": "Elementary Intermediate",
+      "completed": false,
+      "address": "",
+      "contactEmail": "",
+      "contactPhone": "",
+      "note": ""
+    },
+    {
+      "id": "69dc0573-6bdb-463a-ba9a-519b07c5eaf0",
+      "title": "Academic Academy",
+      "completed": false,
+      "address": "",
+      "contactEmail": "",
+      "contactPhone": "",
+      "note": ""
+    },
+    {
+      "id": "eee35bb9-cab7-4225-9f78-5ef8e7051865",
+      "title": "Derek Zoolander Center",
+      "completed": false,
+      "address": "The ant hill",
+      "contactEmail": "readgood@example.com",
       "contactPhone": "",
       "note": ""
     }

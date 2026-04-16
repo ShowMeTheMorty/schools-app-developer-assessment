@@ -10,6 +10,12 @@ const listSchools = async (page: number, limit: number): Promise<School[]> => {
   return db.data.schools.slice(start, start + limit);
 };
 
+const countSchools = async (): Promise<number> => {
+  const db = await getDatabase();
+  await db.read();
+  return db.data.schools.length;
+};
+
 const getSchool = async (id: string): Promise<School | undefined> => {
   const db = await getDatabase();
   await db.read();
@@ -50,6 +56,7 @@ const deleteSchool = async (id: string): Promise<boolean> => {
 
 const schoolRepository: SchoolRepository = {
   listSchools,
+  countSchools,
   getSchool,
   addSchool,
   findSchoolByTitle,

@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "app.ts",
+    "server.ts",
+    "contracts/**/*.ts",
+    "controllers/**/*.ts",
+    "database/**/*.ts",
+    "models/**/*.ts",
+    "repositories/**/*.ts",
+    "routes/**/*.ts",
+    "services/**/*.ts"
+  ],
+  "exclude": ["node_modules", "dist", "tests", "**/*.test.ts"]
+}

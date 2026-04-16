@@ -1,13 +1,14 @@
 import httpClient from './axiosClient';
 import type {
   School,
+  PaginatedSchools,
   ListSchoolsParams,
   CreateSchoolBody,
   UpdateSchoolBody,
 } from './types';
 
-export const listSchools = async (params: ListSchoolsParams): Promise<School[]> => {
-  const response = await httpClient.get<School[]>('/schools', { params });
+export const listSchools = async (params: ListSchoolsParams): Promise<PaginatedSchools> => {
+  const response = await httpClient.get<PaginatedSchools>('/schools', { params });
   return response.data;
 };
 

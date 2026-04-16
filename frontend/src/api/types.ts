@@ -46,3 +46,10 @@ export interface AppApiError {
   message: string;
   details?: ApiErrorDetails;
 }
+
+export interface PaginatedSchools {
+  data: School[];
+  total: number;
+  page: number;
+  limit: number;
+}

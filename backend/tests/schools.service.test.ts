@@ -6,6 +6,7 @@ import { createSchoolsService } from '../services/schools.service';
 const mockSchoolRepository = (): jest.Mocked<SchoolRepository> => {
   return {
     listSchools: jest.fn(),
+    countSchools: jest.fn(),
     getSchool: jest.fn(),
     addSchool: jest.fn(),
     findSchoolByTitle: jest.fn(),
@@ -40,14 +41,16 @@ describe('createSchoolsService', () => {
     ];
 
     schoolRepo.listSchools.mockResolvedValue(schools);
+    schoolRepo.countSchools.mockResolvedValue(2);
 
     const result = await schoolService.listSchools({ page: 1, limit: 10 });
 
     expect(result.isOk()).toBe(true);
     if (result.isOk()) {
-      expect(result.value).toEqual(schools);
+      expect(result.value).toEqual({ data: schools, total: 2, page: 1, limit: 10 });
     }
     expect(schoolRepo.listSchools).toHaveBeenCalledWith(1, 10);
+    expect(schoolRepo.countSchools).toHaveBeenCalledTimes(1);
   });
 
   it('returns internal error when listing schools fails', async () => {
@@ -55,6 +58,7 @@ describe('createSchoolsService', () => {
     const schoolService = createSchoolsService(schoolRepo);
 
     schoolRepo.listSchools.mockRejectedValue(new Error('db down'));
+  schoolRepo.countSchools.mockResolvedValue(0);
 
     const result = await schoolService.listSchools({ page: 1, limit: 10 });
 

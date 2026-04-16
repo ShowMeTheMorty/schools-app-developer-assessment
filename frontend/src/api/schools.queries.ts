@@ -9,15 +9,16 @@ import {
 import { schoolKeys } from "./queryKeys";
 import type {
   School,
-  AppApiError,
+  PaginatedSchools,
   ListSchoolsParams,
   CreateSchoolBody,
   UpdateSchoolBody,
+  AppApiError,
 } from "./types";
 
 
 const useListSchoolsQuery = (params: ListSchoolsParams) => {
-  return useQuery<School[], AppApiError>({
+  return useQuery<PaginatedSchools, AppApiError>({
     queryKey: schoolKeys.list(params.page, params.limit),
     queryFn: () => listSchools(params),
   });

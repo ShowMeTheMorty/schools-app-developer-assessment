@@ -1,7 +1,7 @@
 import { QueryClient } from "@tanstack/react-query"
 import type { AppApiError } from './types';
 
-export const isNormalizedApiError = (error: unknown): error is AppApiError => {
+export const isNormalisedApiError = (error: unknown): error is AppApiError => {
   if (!error || typeof error !== 'object') return false;
 
   const value = error as Partial<AppApiError>;
@@ -14,7 +14,7 @@ const queryClient = new QueryClient({
       staleTime: 30_000,
       refetchOnWindowFocus: false,
       retry: (failureCount, error) => {
-        const statusCode = isNormalizedApiError(error) ? error.statusCode : undefined;
+        const statusCode = isNormalisedApiError(error) ? error.statusCode : undefined;
 
         if (statusCode && [400, 404, 409].includes(statusCode)) {
           return false;

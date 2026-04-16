@@ -8,6 +8,7 @@ import type School from '../models/school';
 
 const mockSchoolRepository = (): jest.Mocked<SchoolRepository> => ({
   listSchools: jest.fn(),
+  countSchools: jest.fn(),
   getSchool: jest.fn(),
   addSchool: jest.fn(),
   findSchoolByTitle: jest.fn(),
@@ -110,6 +111,7 @@ describe('Schools API', () => {
   it('should list schools', async () => {
     const repo = mockSchoolRepository();
     repo.listSchools.mockResolvedValue([existingSchool]);
+    repo.countSchools.mockResolvedValue(1);
     const app = buildTestApp(repo);
 
     const response = await request(app)
@@ -117,7 +119,12 @@ describe('Schools API', () => {
       .query({ page: 1, limit: 10 });
 
     expect(response.status).toBe(200);
-    expect(response.body).toEqual([existingSchool]);
+    expect(response.body).toEqual({
+      data: [existingSchool],
+      total: 1,
+      page: 1,
+      limit: 10,
+    });
   });
 
   it('should return 400 for invalid list query', async () => {

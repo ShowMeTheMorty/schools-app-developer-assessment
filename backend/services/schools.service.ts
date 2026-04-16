@@ -2,17 +2,25 @@ import { v4 as uuidv4 } from 'uuid';
 import { ok, err, Result } from 'neverthrow';
 import School from '../models/school';
 import { type DomainError, DomainErrorType } from '../contracts/domainError';
-import { CreateSchoolRequest, ListSchoolsRequest, UpdateSchoolRequest } from '../contracts/school.contracts';
+import { 
+  CreateSchoolRequest, 
+  ListSchoolsRequest, 
+  PaginatedSchoolsResult, 
+  UpdateSchoolRequest 
+} from '../contracts/school.contracts';
 import type { SchoolRepository } from '../contracts/school.repository.interface';
 
 // core invariants enforced:
 // - school title must be unique
 
 export const createSchoolsService = (schoolRepository: SchoolRepository) => {
-  const listSchools = async (request: ListSchoolsRequest): Promise<Result<School[], DomainError>> => {
+  const listSchools = async (request: ListSchoolsRequest): Promise<Result<PaginatedSchoolsResult, DomainError>> => {
     try {
-      const schools = await schoolRepository.listSchools(request.page, request.limit);
-      return ok(schools);
+      const [schools, total] = await Promise.all([
+        schoolRepository.listSchools(request.page, request.limit),
+        schoolRepository.countSchools(),
+      ]);
+      return ok({ data: schools, total, page: request.page, limit: request.limit });
     } catch (error) {
       return err({ type: DomainErrorType.InternalError, message: 'Failed to fetch schools' });
     }

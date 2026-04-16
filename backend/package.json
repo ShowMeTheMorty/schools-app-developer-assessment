@@ -4,7 +4,7 @@
   "description": "Backend for Todo App",
   "main": "dist/server.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -p tsconfig.build.json",
     "start": "npm run build && node dist/server.js",
     "dev": "nodemon --exec ts-node server.ts",
     "test": "jest",

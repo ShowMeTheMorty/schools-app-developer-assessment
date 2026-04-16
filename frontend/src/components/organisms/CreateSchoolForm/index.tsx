@@ -5,7 +5,7 @@ import { notifications } from '@mantine/notifications';
 import { useCreateSchoolMutation } from 'api/schools.queries';
 import React from 'react';
 import { z } from 'zod';
-import { isNormalizedApiError } from 'api/queryClient';
+import { isNormalisedApiError } from 'api/queryClient';
 
 interface CreateSchoolFormProps {
   onClose: () => void;
@@ -54,7 +54,7 @@ const CreateSchoolForm = ({ onClose }: CreateSchoolFormProps) => {
     } catch (error) {
       notifications.show({
         title: 'Create failed',
-        message: isNormalizedApiError(error) ? error.message : 'Could not create the school.',
+        message: isNormalisedApiError(error) ? error.message : 'Could not create the school.',
         color: 'red',
       });
     }
