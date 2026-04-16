@@ -13,6 +13,8 @@ import { useForm } from '@mantine/form';
 import { useUpdateSchoolMutation, useDeleteSchoolMutation } from 'api/schools.queries';
 import { School } from 'api/types';
 import { z } from 'zod';
+import DeleteModal from '../DeleteModal';
+import { useState } from 'react';
 
 
 interface SchoolDetailsFormProps {
@@ -34,6 +36,7 @@ type UpdateSchoolFormValues = z.infer<typeof updateSchoolSchema>;
 const SchoolDetails = ({ school, onClose }: SchoolDetailsFormProps) => {
   const updateSchoolMutation = useUpdateSchoolMutation();
   const deleteSchoolMutation = useDeleteSchoolMutation();
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const form = useForm<UpdateSchoolFormValues>({
     initialValues: {
@@ -118,7 +121,7 @@ const SchoolDetails = ({ school, onClose }: SchoolDetailsFormProps) => {
             <Button 
               c="red" 
               variant="outline"
-              onClick={handleSubmitDelete}
+              onClick={() => setDeleteModalOpen(true)}
             >
               Delete
             </Button>
@@ -134,6 +137,12 @@ const SchoolDetails = ({ school, onClose }: SchoolDetailsFormProps) => {
           </Group>
         </Stack>
       </form>
+
+      <DeleteModal
+        isOpen={isDeleteModalOpen}
+        onConfirm={handleSubmitDelete}
+        onClose={() => setDeleteModalOpen(false)}
+      />
 
     </>
   );

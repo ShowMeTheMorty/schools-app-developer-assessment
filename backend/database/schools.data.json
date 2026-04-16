@@ -1,13 +1,22 @@
 {
   "schools": [
     {
-      "id": "11111111-1111-4111-8111-111111111111",
-      "title": "Springfield Elementary",
+      "id": "7733007d-904b-48a4-a1cb-d326a7a9b2eb",
+      "title": "Five High School",
       "completed": false,
-      "address": "742 Evergreen Terrace",
-      "contactEmail": "contact@springfield-elementary.edu",
-      "contactPhone": "555-0000",
-      "note": "Bartholemeu"
+      "address": "5 Downlow lane",
+      "contactEmail": "high5office@example.com",
+      "contactPhone": "555-555-555",
+      "note": "Bring hand sanitiser."
+    },
+    {
+      "id": "7018c4f5-aaeb-426d-8ab9-2473a7d4c7f7",
+      "title": "Twist Primary",
+      "completed": false,
+      "address": "123 Floo St",
+      "contactEmail": "sweep@example.com",
+      "contactPhone": "",
+      "note": ""
     }
   ]
 }
