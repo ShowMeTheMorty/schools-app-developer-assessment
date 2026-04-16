@@ -19,14 +19,17 @@ export interface ApiError {
 
 // add mappers here
 export const zodErrorToApiError = (zodError: z.ZodError): ApiError => {
-  const treeified = z.treeifyError(zodError);
+  const errors = zodError.issues.map((issue) => {
+    const path = issue.path.length > 0 ? issue.path.join('.') : 'request';
+    return `${path}: ${issue.message}`;
+  });
 
   return {
     statusCode: 400,
     type: ApiErrorType.ValidationError,
     message: 'Request validation failed',
     details: {
-      errors: treeified.errors,
+      errors,
     },
   };
 };

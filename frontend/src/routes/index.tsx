@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import NotFoundPage from 'pages/NotFoundPage';
 import WelcomePage from 'pages/WelcomePage';
 import SchoolListPage from 'pages/SchoolListPage';
+import { JSX } from 'react';
 
 const ROUTES = {
   home: '/home',

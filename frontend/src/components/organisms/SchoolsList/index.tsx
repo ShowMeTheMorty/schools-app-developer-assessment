@@ -3,6 +3,7 @@ import { Paper, Stack, Text } from "@mantine/core";
 import SchoolListItem from "components/molecules/SchoolListItem";
 import { useAside } from "contexts/aside/AsideContext";
 import { AsideMode } from "contexts/aside/aside.types";
+import { JSX } from "react";
 
 interface SchoolsListProps {
   schools: School[];
@@ -12,7 +13,7 @@ const SchoolsList = ({ schools }: SchoolsListProps): JSX.Element => {
   const { openAside } = useAside();
   
   return (
-    <Paper shadow="sm" p="md">
+    <Paper shadow="md" p="md" withBorder>
       {schools.length === 0 ? (
         <Text>School's out 😎 (You're out of schools)</Text>
       ) : (

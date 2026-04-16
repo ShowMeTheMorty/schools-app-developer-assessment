@@ -1,4 +1,4 @@
-import { createTheme } from '@mantine/core';
+import { colorsTuple, createTheme } from '@mantine/core';
 
 export const appTheme = createTheme({
   fontFamily: 'Open Sans, sans-serif',
@@ -7,4 +7,8 @@ export const appTheme = createTheme({
     md: '10px',
   },
   defaultRadius: 'md',
+  colors: {
+    brand: colorsTuple('#4caf50'),
+  },
+  primaryColor: 'brand',
 });

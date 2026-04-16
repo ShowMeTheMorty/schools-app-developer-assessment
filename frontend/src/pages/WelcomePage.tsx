@@ -1,4 +1,5 @@
 import { Container, Text, Title } from '@mantine/core';
+import { JSX } from 'react';
 
 const WelcomePage = (): JSX.Element => {
   return (

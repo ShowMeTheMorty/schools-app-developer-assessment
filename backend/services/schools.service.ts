@@ -95,7 +95,7 @@ export const createSchoolsService = (schoolRepository: SchoolRepository) => {
           return err({ type: DomainErrorType.ValidationError, message: "Sith order injection is not allowed" });
         }
         // enforce invariant of title uniquness
-        if (await schoolRepository.findSchoolByTitle(title)) {
+        if (await schoolRepository.findSchoolByTitle(title) && request.id !== existingSchool.id) {
           return err({ type: DomainErrorType.DuplicateError, message: 'A school with this title already exists' });
         }
 
