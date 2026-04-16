@@ -12,7 +12,7 @@
     {
       "id": "7018c4f5-aaeb-426d-8ab9-2473a7d4c7f7",
       "title": "Twist Primary",
-      "completed": false,
+      "completed": true,
       "address": "123 Floo St",
       "contactEmail": "sweep@example.com",
       "contactPhone": "",

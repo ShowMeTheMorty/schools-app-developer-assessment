@@ -14,7 +14,7 @@ import { useUpdateSchoolMutation, useDeleteSchoolMutation } from 'api/schools.qu
 import { School } from 'api/types';
 import { z } from 'zod';
 import DeleteModal from '../DeleteModal';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 
 interface SchoolDetailsFormProps {
@@ -49,6 +49,17 @@ const SchoolDetails = ({ school, onClose }: SchoolDetailsFormProps) => {
     },
     validate: zod4Resolver(updateSchoolSchema),
   });
+
+  useEffect(() => {
+    form.setValues({
+      title: school.title,
+      address: school.address,
+      contactEmail: school.contactEmail,
+      contactPhone: school.contactPhone,
+      note: school.note,
+      completed: school.completed,
+    });
+  }, [school]);
 
   const handleSubmit = form.onSubmit(async (values) => {
     await updateSchoolMutation.mutateAsync({
