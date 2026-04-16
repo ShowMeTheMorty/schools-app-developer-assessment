@@ -10,6 +10,8 @@ import {
   Textarea, 
   Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
+import { isNormalizedApiError } from 'api/queryClient';
 import { useUpdateSchoolMutation, useDeleteSchoolMutation } from 'api/schools.queries';
 import { School } from 'api/types';
 import { z } from 'zod';
@@ -22,10 +24,15 @@ interface SchoolDetailsFormProps {
   onClose: () => void;
 }
 
+const optionalEmailSchema = z.string().refine(
+  (value) => value === '' || z.string().email().safeParse(value).success,
+  'Please enter a valid email'
+);
+
 const updateSchoolSchema = z.object({
   title: z.string().trim().min(1, 'Title is required').max(512, 'Title must be at most 512 characters'),
   address: z.string(),
-  contactEmail: z.string().email('Please enter a valid email').or(z.literal('')),
+  contactEmail: optionalEmailSchema,
   contactPhone: z.string(),
   note: z.string(),
   completed: z.boolean(),
@@ -62,25 +69,53 @@ const SchoolDetails = ({ school, onClose }: SchoolDetailsFormProps) => {
   }, [school]);
 
   const handleSubmit = form.onSubmit(async (values) => {
-    await updateSchoolMutation.mutateAsync({
-      id: school.id,
-      body: {
-        title: values.title,
-        completed: values.completed,
-        address: values.address,
-        contactEmail: values.contactEmail,
-        contactPhone: values.contactPhone,
-        note: values.note,
-      },
-    });
+    try {
+      await updateSchoolMutation.mutateAsync({
+        id: school.id,
+        body: {
+          title: values.title,
+          completed: values.completed,
+          address: values.address,
+          contactEmail: values.contactEmail,
+          contactPhone: values.contactPhone,
+          note: values.note,
+        },
+      });
 
-    onClose();
+      notifications.show({
+        title: 'School updated',
+        message: 'The school details were saved successfully.',
+        color: 'green',
+      });
+
+      onClose();
+    } catch (error) {
+      notifications.show({
+        title: 'Save failed',
+        message: isNormalizedApiError(error) ? error.message : 'Could not update the school.',
+        color: 'red',
+      });
+    }
   });
 
   const handleSubmitDelete = async () => {
-    await deleteSchoolMutation.mutateAsync(school.id);
-    
-    onClose();
+    try {
+      await deleteSchoolMutation.mutateAsync(school.id);
+
+      notifications.show({
+        title: 'School deleted',
+        message: 'The school was deleted successfully.',
+        color: 'green',
+      });
+
+      onClose();
+    } catch (error) {
+      notifications.show({
+        title: 'Delete failed',
+        message: isNormalizedApiError(error) ? error.message : 'Could not delete the school.',
+        color: 'red',
+      });
+    }
   };
 
   return (

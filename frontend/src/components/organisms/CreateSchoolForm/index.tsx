@@ -1,19 +1,25 @@
 import { zod4Resolver } from 'mantine-form-zod-resolver';
 import { Button, Group, Space, Stack, Text, TextInput, Textarea, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
 import { useCreateSchoolMutation } from 'api/schools.queries';
 import React from 'react';
 import { z } from 'zod';
-
+import { isNormalizedApiError } from 'api/queryClient';
 
 interface CreateSchoolFormProps {
   onClose: () => void;
 }
 
+const optionalEmailSchema = z.string().refine(
+  (value) => value === '' || z.string().email().safeParse(value).success,
+  'Please enter a valid email'
+);
+
 const createSchoolSchema = z.object({
   title: z.string().trim().min(1, 'Title is required').max(512, 'Title must be at most 512 characters'),
   address: z.string(),
-  contactEmail: z.string().email('Please enter a valid email').or(z.literal('')),
+  contactEmail: optionalEmailSchema,
   contactPhone: z.string(),
   note: z.string(),
 });
@@ -35,8 +41,23 @@ const CreateSchoolForm = ({ onClose }: CreateSchoolFormProps) => {
   });
 
   const handleSubmit = form.onSubmit(async (values) => {
-    await createSchoolMutation.mutateAsync(values);
-    onClose();
+    try {
+      await createSchoolMutation.mutateAsync(values);
+
+      notifications.show({
+        title: 'School created',
+        message: 'The new school has been added successfully.',
+        color: 'green',
+      });
+
+      onClose();
+    } catch (error) {
+      notifications.show({
+        title: 'Create failed',
+        message: isNormalizedApiError(error) ? error.message : 'Could not create the school.',
+        color: 'red',
+      });
+    }
   });
 
   return (

@@ -17,6 +17,15 @@
       "contactEmail": "sweep@example.com",
       "contactPhone": "",
       "note": ""
+    },
+    {
+      "id": "eef20f83-181b-4322-abe4-e924ad557695",
+      "title": "Middle Intermediate",
+      "completed": false,
+      "address": "",
+      "contactEmail": "",
+      "contactPhone": "",
+      "note": ""
     }
   ]
 }

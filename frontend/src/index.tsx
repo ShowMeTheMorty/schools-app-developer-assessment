@@ -1,10 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { MantineProvider } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter } from 'react-router-dom';
 import { appTheme } from './theme/theme';
@@ -23,6 +25,7 @@ root.render(
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <MantineProvider theme={appTheme} defaultColorScheme='light'>
+          <Notifications />
           <AsideProvider>
             <App />
           </AsideProvider>

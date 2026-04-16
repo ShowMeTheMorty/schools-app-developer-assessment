@@ -1,8 +1,11 @@
 import { QueryClient } from "@tanstack/react-query"
+import type { AppApiError } from './types';
 
-type NormalizedApiError = {
-  statusCode: number;
-  message: string;
+export const isNormalizedApiError = (error: unknown): error is AppApiError => {
+  if (!error || typeof error !== 'object') return false;
+
+  const value = error as Partial<AppApiError>;
+  return typeof value.statusCode === 'number' && typeof value.message === 'string';
 };
 
 const queryClient = new QueryClient({
@@ -11,8 +14,7 @@ const queryClient = new QueryClient({
       staleTime: 30_000,
       refetchOnWindowFocus: false,
       retry: (failureCount, error) => {
-        const apiError = error as Partial<NormalizedApiError>;
-        const statusCode = apiError?.statusCode;
+        const statusCode = isNormalizedApiError(error) ? error.statusCode : undefined;
 
         if (statusCode && [400, 404, 409].includes(statusCode)) {
           return false;
