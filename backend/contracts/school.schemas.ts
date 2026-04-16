@@ -16,7 +16,7 @@ export const CreateSchoolBodySchema = z.object({
   address: z.string({error: "Address must be a string"}),
   contactEmail: z
   .string({error: "Contact email must be a string"})
-  .email({error: "Contact email must be a valid email"}),
+  .email({error: "Contact email must be a valid email"}).or(z.literal('')),
   contactPhone: z.string({error: "Contact phone must be a string"}),
   note: z.string({error: "Note must be a string"}),
 });
@@ -35,7 +35,7 @@ export const UpdateSchoolBodySchema = z.object({
   .optional(),
   contactEmail: z
   .string({error: "Contact email must be a string"})
-  .email({error: "Contact email must be a valid email"})
+  .email({error: "Contact email must be a valid email"}).or(z.literal(''))
   .optional(),
   contactPhone: z
   .string({error: "Contact phone must be a string"})
