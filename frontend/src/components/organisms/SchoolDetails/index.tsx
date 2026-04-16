@@ -10,7 +10,7 @@ import {
   Textarea, 
   Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { useUpdateSchoolMutation } from 'api/schools.queries';
+import { useUpdateSchoolMutation, useDeleteSchoolMutation } from 'api/schools.queries';
 import { School } from 'api/types';
 import { z } from 'zod';
 
@@ -33,6 +33,7 @@ type UpdateSchoolFormValues = z.infer<typeof updateSchoolSchema>;
 
 const SchoolDetails = ({ school, onClose }: SchoolDetailsFormProps) => {
   const updateSchoolMutation = useUpdateSchoolMutation();
+  const deleteSchoolMutation = useDeleteSchoolMutation();
 
   const form = useForm<UpdateSchoolFormValues>({
     initialValues: {
@@ -61,6 +62,12 @@ const SchoolDetails = ({ school, onClose }: SchoolDetailsFormProps) => {
 
     onClose();
   });
+
+  const handleSubmitDelete = async () => {
+    await deleteSchoolMutation.mutateAsync(school.id);
+    
+    onClose();
+  };
 
   return (
     <>
@@ -106,13 +113,24 @@ const SchoolDetails = ({ school, onClose }: SchoolDetailsFormProps) => {
             {...form.getInputProps('completed', { type: 'checkbox' })}
           />
 
-          <Group justify="flex-end">
-            <Button variant="default" onClick={onClose} type="button">
-              Close
+          <Space h="lg" />
+          <Group justify="space-between">
+            <Button 
+              c="red" 
+              variant="outline"
+              onClick={handleSubmitDelete}
+            >
+              Delete
             </Button>
-            <Button type="submit" loading={updateSchoolMutation.isPending}>
-              Save
-            </Button>
+
+            <Group>
+              <Button variant="default" onClick={onClose} type="button">
+                Close
+              </Button>
+              <Button type="submit" loading={updateSchoolMutation.isPending}>
+                Save
+              </Button>
+            </Group>
           </Group>
         </Stack>
       </form>

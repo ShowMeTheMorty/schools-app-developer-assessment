@@ -78,6 +78,7 @@ const CreateSchoolForm = ({ onClose }: CreateSchoolFormProps) => {
             {...form.getInputProps('note')}
           />
 
+          <Space h="lg" />
           <Group justify="flex-end">
             <Button variant="default" onClick={onClose} type="button">
               Cancel
