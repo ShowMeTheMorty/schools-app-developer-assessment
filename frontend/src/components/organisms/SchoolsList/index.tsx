@@ -18,6 +18,7 @@ const SchoolsList = (): JSX.Element => {
   const [activePage, setActivePage] = useState(1);
   const { data, isLoading, error } = useListSchoolsQuery({ page: activePage, limit: 6 });
   const { openAside } = useAside();
+  const totalPages = data ? Math.ceil(data.total / data.limit) : 0;
 
   if (isLoading) {
     return (
@@ -43,14 +44,18 @@ const SchoolsList = (): JSX.Element => {
               <SchoolListItem
                 key={school.id}
                 title={school.title}
-                description={school.completed ? "Status: Completed" : "Status: In Progress"}
+                description={school.completed ? "Completed" : "In Progress"}
                 onClick={() => openAside(AsideMode.SchoolDetails, { school })}
               />
             ))}
           </Stack>
           <Space h="lg" />
           <Center>
-            <Pagination total={Math.ceil(data!.total / data!.limit)} value={activePage} onChange={setActivePage} />
+            <Pagination 
+              total={totalPages} 
+              value={activePage} 
+              onChange={setActivePage} 
+            />
           </Center>
         </>
       )}

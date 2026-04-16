@@ -1,4 +1,4 @@
-import { Button, Container, Group, Modal, Space, Text, Title } from '@mantine/core';
+import { Button, Group, Modal, Text } from '@mantine/core';
 import React from 'react';
 import { JSX } from 'react';
 
@@ -13,21 +13,19 @@ const DeleteModal = ({ isOpen, onConfirm, onClose }: DeleteModalProps): JSX.Elem
     <Modal 
       opened={isOpen} 
       onClose={onClose}
+      title="Delete school"
       centered
     >
-      <Container p="lg">
-        <Text>Are you sure you want to delete this school?</Text>
-        <Text c="red">This action cannot be undone.</Text>
-        <Space h="lg" />
-        <Group justify="flex-end" mt="md">
-          <Button variant="default" onClick={onClose} type="button">
-            Cancel
-          </Button>
-          <Button color="red" onClick={onConfirm}>
-            Delete
-          </Button>
-        </Group>
-      </Container>
+      <Text>Are you sure you want to delete this school?</Text>
+      <Text size="sm" c="dimmed" mt="xs">This action cannot be undone.</Text>
+      <Group justify="flex-end" mt="xl">
+        <Button variant="default" onClick={onClose} type="button">
+          Cancel
+        </Button>
+        <Button color="red" onClick={onConfirm}>
+          Delete
+        </Button>
+      </Group>
     </Modal>
   )
 }

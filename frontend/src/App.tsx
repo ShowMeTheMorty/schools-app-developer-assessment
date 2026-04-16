@@ -65,7 +65,7 @@ function App() {
         }} />
       </AppShell.Navbar>
 
-      <AppShell.Aside p="md">
+      <AppShell.Aside p="md" style={{ overflowY: 'auto' }}>
         <AsideContent />
       </AppShell.Aside>
 

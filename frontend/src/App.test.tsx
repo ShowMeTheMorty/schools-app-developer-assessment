@@ -19,6 +19,6 @@ test('Renders welcome to SchoolDocs', () => {
       </QueryClientProvider>
     </MemoryRouter>
   );
-  const linkElement = screen.getByText(/Welcome to the SchoolsDocs/i);
+  const linkElement = screen.getByText(/Welcome to School Dash/i);
   expect(linkElement).toBeTruthy();
 });

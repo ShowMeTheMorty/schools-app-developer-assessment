@@ -1,0 +1,9 @@
+.item {
+  cursor: pointer;
+  transition: box-shadow 150ms ease, transform 150ms ease;
+}
+
+.item:hover {
+  box-shadow: var(--mantine-shadow-md);
+  transform: translateY(-1px);
+}

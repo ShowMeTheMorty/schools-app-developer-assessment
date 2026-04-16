@@ -11,10 +11,10 @@ const SchoolListPage = (): JSX.Element => {
   return (
     <Container>
       <Stack gap="lg">
-        <Group justify="space-between" align="flex-start">
+        <Group justify="space-between" align="center" wrap="nowrap">
           <Stack gap={0}>
             <Title order={2}>Schools List</Title>
-            <Text c="dimmed">An index of all databased schools</Text>
+            <Text c="dimmed">View, edit, or add new schools.</Text>
           </Stack>
           <Button onClick={() => openAside(AsideMode.CreateSchool, {})}>+ Add School</Button>
         </Group>

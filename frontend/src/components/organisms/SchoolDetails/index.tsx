@@ -1,8 +1,8 @@
 import { zod4Resolver } from 'mantine-form-zod-resolver';
 import { 
   Button, 
-  Checkbox, 
   Group, 
+  Select,
   Space, 
   Stack, 
   Text, 
@@ -157,9 +157,15 @@ const SchoolDetails = ({ school, onClose }: SchoolDetailsFormProps) => {
             {...form.getInputProps('note')}
           />
 
-          <Checkbox
-            label="Completed"
-            {...form.getInputProps('completed', { type: 'checkbox' })}
+          <Select
+            label="Status"
+            data={[
+              { value: 'false', label: 'In progress' },
+              { value: 'true', label: 'Completed' },
+            ]}
+            value={String(form.values.completed)}
+            onChange={(val) => form.setFieldValue('completed', val === 'true')}
+            allowDeselect={false}
           />
 
           <Space h="lg" />

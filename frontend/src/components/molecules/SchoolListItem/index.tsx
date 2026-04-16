@@ -1,5 +1,6 @@
-import { ActionIcon, Box, Group, Paper, Text } from '@mantine/core';
+import { Group, Paper, Text } from '@mantine/core';
 import { JSX } from 'react';
+import styles from './SchoolListItem.module.css';
 
 
 interface SchoolListItemProps {
@@ -10,17 +11,14 @@ interface SchoolListItemProps {
 
 const SchoolListItem = ({ title, description, onClick }: SchoolListItemProps): JSX.Element => {
   return (
-    <Box onClick={onClick}>
-      <Paper shadow="xs" p="md" withBorder>
-        <Group>
-          <Text>{title}</Text>
-          {description && (
-            <Text c="dimmed">{description}</Text>
-          )}
-        </Group>
-
-      </Paper>
-    </Box>
+    <Paper className={styles.item} shadow="xs" p="md" withBorder onClick={onClick}>
+      <Group justify="space-between">
+        <Text>{title}</Text>
+        {description && (
+          <Text c="dimmed">{description}</Text>
+        )}
+      </Group>
+    </Paper>
   )
 }
 
