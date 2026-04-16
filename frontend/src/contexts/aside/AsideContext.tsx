@@ -1,4 +1,3 @@
-import { School } from 'api/types';
 import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import { AsideMode, AsidePayloadMap, AsideState } from './aside.types';
 
